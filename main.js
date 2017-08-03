@@ -56,11 +56,3 @@ var getFinalScores = function(members,teams,scores,callback){
 	})
 	callback(teams)
 }
-
-readMembers('MOCK_DATA.csv',(members,teams)=>{
-	readScores('MOCK_DATA_SCORE_2.csv',(scores)=>{
-		getFinalScores(members,teams,scores,function(teams){
-			console.log(teams)
-		})
-	})
-})
