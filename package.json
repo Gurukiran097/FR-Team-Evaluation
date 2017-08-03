@@ -1,0 +1,19 @@
+{
+  "name": "fr_team_evaluation",
+  "version": "1.0.0",
+  "description": "Code for assignment <a href=\"https://github.com/AutolabJS/AutolabJS/wiki/FR-Team-Evaluation\">here</a>",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gurukiran097/FR-Team-Evaluation.git"
+  },
+  "author": "Gurukiran097",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Gurukiran097/FR-Team-Evaluation/issues"
+  },
+  "homepage": "https://github.com/Gurukiran097/FR-Team-Evaluation#readme"
+}
