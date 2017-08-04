@@ -19,8 +19,6 @@ var readMembers = function(inputFile,callback){
 		}
 	})
 	rl.on('close',()=>{
-    console.log(members)
-    console.log(teams)
 		callback(members,teams)
 	})
 }	
@@ -47,7 +45,6 @@ var readScores = function(scoreFile,callback){
 	})
 	rl.on('close',()=>{
 		callback(scores)
-    console.log(scores)
 	})
 }
 
@@ -67,8 +64,8 @@ var generateTeamScores = function(teamFile,scoreFile,outFile){
   readMembers(teamFile,(members,teams)=>{
     readScores(scoreFile,(scores)=>{
       getFinalScores(members,teams,scores,(teams)=>{
-        console.log(teams)
         let stream = fs.createWriteStream(outFile)
+        stream.write("studentID,score\n")
         for(let member in members){
           if(members.hasOwnProperty(member)){
             stream.write(member+","+teams[members[member]]+"\n")
@@ -78,6 +75,7 @@ var generateTeamScores = function(teamFile,scoreFile,outFile){
     })
   })
 }
+
 
 module.exports = {
   generateTeamScores:generateTeamScores
