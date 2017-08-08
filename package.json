@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/Gurukiran097/FR-Team-Evaluation/issues"
   },
-  "homepage": "https://github.com/Gurukiran097/FR-Team-Evaluation#readme"
+  "homepage": "https://github.com/Gurukiran097/FR-Team-Evaluation#readme",
+  "dependencies": {
+    "chai": "^4.1.1",
+    "mocha": "^3.5.0"
+  }
 }

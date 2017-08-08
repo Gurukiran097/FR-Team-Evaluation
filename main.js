@@ -1,49 +1,36 @@
-var fs = require('fs')
-var readline = require('readline')
+const csvParser = require('./csvParser')
+
 
 var readMembers = function(inputFile,callback){
-	let inStream = fs.createReadStream(inputFile)
-	let members = {}
-	let teams = {}
-	let rl = readline.createInterface({
-		input:inStream
+	csvParser.read(inputFile,(members)=>{
+		members.shift()
+		let memberObj = {}
+		let teams = {}
+		members.forEach((member)=>{
+			memberObj[member[0]] = member[1]
+			if(!teams.hasOwnProperty(member[1])){
+				teams[member[1]] = 0;
+			}
+		})
+		callback(memberObj,teams)
 	})
-	rl.on('line',(line)=>{
-		line = line.split(',')
-		if(line[0]==="studentID" && line[1]==="teamID"){
-			return
-		}
-		members[line[0]] = line[1]
-		if(!teams.hasOwnProperty(line[1])){
-			teams[line[1]] = 0
-		}
-	})
-	rl.on('close',()=>{
-		callback(members,teams)
-	})
-}	
+}
 
 
 var readScores = function(scoreFile,callback){
-	let inStream = fs.createReadStream(scoreFile)
-	let scores = []
-	let rl = readline.createInterface({
-		input:inStream
-	})
-	rl.on('line',(line)=>{
-		line = line.split(',')
-    if(line[1]==""){
-      line[1]="0"
-    }
-		if(line[0]==="studentID" && line[1]==="score"){
-			return
+	csvParser.read(scoreFile,(scores)=>{
+		scores.shift()
+		let len = scores.length
+		for(let i=0;i<len;i++){
+			if(scores[0][1]==""){
+				scores[0][1]="0"
+			}
+			scores.push({
+				memberID:scores[0][0],
+				score:scores[0][1]
+			})
+			scores.shift()
 		}
-		scores.push({
-			memberID:line[0],
-			score:parseInt(line[1])
-		})
-	})
-	rl.on('close',()=>{
 		callback(scores)
 	})
 }
@@ -60,25 +47,23 @@ var getFinalScores = function(members,teams,scores,callback){
 	callback(teams)
 }
 
-var generateTeamScores = function(teamFile,scoreFile,outFile){
+var generateMemberScores = function(teamFile,scoreFile,outFile,callback){
   readMembers(teamFile,(members,teams)=>{
     readScores(scoreFile,(scores)=>{
       getFinalScores(members,teams,scores,(teams)=>{
-        let stream = fs.createWriteStream(outFile)
-        stream.write("studentID,score\n")
+				let finalMembers = []
+				finalMembers.push(["studentID","score"])
         for(let member in members){
           if(members.hasOwnProperty(member)){
-            stream.write(member+","+teams[members[member]]+"\n")
+						finalMembers.push([member,teams[members[member]]])
           }
         }
+				csvParser.write(outFile,finalMembers,callback)
       })
     })
   })
 }
 
-
 module.exports = {
-  generateTeamScores:generateTeamScores
+  generateMemberScores:generateMemberScores
 }
-
-

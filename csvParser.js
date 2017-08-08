@@ -19,7 +19,7 @@ const read = function(inFile,callback){
 
 
 
-const write = function(data,outFile){
+const write = function(outFile,data,callback){
   let outStream = fs.createWriteStream(outFile)
   let counter = 0;
   data.forEach((line)=>{
@@ -28,6 +28,7 @@ const write = function(data,outFile){
       counter++;
       if(counter===data.length){
         outStream.close()
+        callback()
       }
     })
   })
@@ -37,4 +38,3 @@ module.exports = {
   read:read,
   write:write
 }
-
